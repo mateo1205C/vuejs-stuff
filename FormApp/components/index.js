@@ -1,33 +1,38 @@
-Vue.component('calendar-app', {
+Vue.component('form-app', {
     template:`
-        <div class="principal-container container">
-            <InputTextComp 
-                :text="textReturn('Name')" />
-            <InputTextComp 
-                :text="textReturn('Email')" />
-            <SelectComp 
-                :text="textReturn('Team Member')"
-                :items="itemsSelect1" />
-            <InputRadioComp 
-                :text="textReturn('Frameworks')"
-                :items="itemsRadio1" />
-            <InputCheckComp 
-                :text="textReturn('Features')"
-                :items="itemsCheck1" />
-            <TextAreaComp 
-                :text="textReturn('Message with Counter')"/>
-            
-            <div class="d-flex align-content-end">
-                <input type="submit" value="Submit">
+        <form>
+            <div class="principal-container container">
+                <InputTextComp 
+                    :text="textReturn('Name')" 
+                    :type="textReturn('text')" />                  
+                <InputTextComp 
+                    :text="textReturn('Email')" 
+                    :type="textReturn('email')" />                     
+                <SelectComp 
+                    :text="textReturn('Team Member')"
+                    :items="itemsSelect1" />
+                <InputRadioComp 
+                    :text="textReturn('Frameworks')"
+                    :items="itemsRadio1" />
+                <InputCheckComp 
+                    :text="textReturn('Features')"
+                    :items="itemsCheck1" />
+                <TextAreaComp 
+                    :text="textReturn('Message with Counter')"/>
+                
+                <div class="d-flex justify-content-center">
+                    <input type="submit" value="Submit">
+                </div>
             </div>
-        </div>
+        </form>
     `,
     data() {
-        return {            
+        return {
+            objectSubmit:{},            
             itemsSelect1: [
                 'John Doe',
                 'Sarah Reymond',
-                'Vladimir Hoffman',
+                'Vladimir Hoffman'
             ],
             itemsRadio1: [
                 'Angular JS',
@@ -38,14 +43,14 @@ Vue.component('calendar-app', {
                 'Reactivity',
                 'Encapsulation',
                 'Data Binding',
-                'Check All',
+                'Check All'
             ],
         }
     },
     methods: {
         textReturn(value) {
             return value
-        }
+        },       
     },
     components: {        
         InputTextComp,

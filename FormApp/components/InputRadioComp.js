@@ -13,7 +13,10 @@ let InputRadioComp = {
             type: String,
             required: true,
         },
-        items: [],
+        items: {
+            type: Array,
+            default: []
+        }
     },
     methods: {
         codeConventions (value) { //Metodo para poner en mayusculas            

@@ -31,6 +31,6 @@ let TextAreaComp = {
             if (this.letterCounter == 255) {
                 return false
             }            
-        }
+        },
     },
 }
