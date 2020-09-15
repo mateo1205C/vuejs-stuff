@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=7">
+    <title>Movie App</title>
+    <!-- BOOTSTRAP -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+    <!-- FONT AWESOME -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css"
+        integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc" crossorigin="anonymous">
+
+    <!-- CUSTOM CSS -->
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+    <div id="app">
+        <router-view></router-view>
+    </div>
+
+    <!-- BOOTSTRAP -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+        crossorigin="anonymous"></script>
+
+    <!-- VUE.JS -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vuex@2.0.0"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+    <script src="./components/MovieFav.js"></script>
+    <script src="./components/MovieComp.js"></script>
+    <script src="./components/SearchComp.js"></script>
+    <script src="./components/MovieDetails.js"></script>
+    <script src="./components/index.js"></script>
+    <script>
+        const APIKEY = '523d3874b3a06b9d05170c6e62a0750d'
+        const BASEURL = 'https://api.themoviedb.org/3'
+        Vue.mixin({
+            data() {
+                return {
+                    apiConfig: `?api_key=${APIKEY}&language=es-ES`,
+                    apiBaseURL: BASEURL
+                }
+            },
+            filters: {
+                coverURL(str) {
+                    return `https://image.tmdb.org/t/p/w185_and_h278_bestv2${str}`
+                }
+            }
+        })
+
+        let routes = [
+            {
+                path: '/',
+                name: 'home',
+                component: MovieApp,
+            },
+            {
+                path: '/pelicula/:id',
+                name: 'pelicula',
+                component: MovieDetails,
+            },
+        ]
+
+        let router = new VueRouter({
+            mode: 'history', //Linea para quitar el numeral y la barra de la URL
+            routes
+        })
+
+        const store = new Vuex.Store({
+            state: {
+                favMovies:[]
+            },
+            mutations: {
+                toggleFavMovie(state, movie) {
+                    let index = state.favMovies.findIndex(favMovie => favMovie.id == movie.id)
+                    if(index >= 0) {
+                        state.favMovies.splice(index, 1)
+                        return
+                    }
+                    state.favMovies.push(movie)
+                }
+            }
+        })
+
+        /* const app = new Vue({
+            router
+        }).$mount('#app') */
+
+        let vm = new Vue({
+            el: '#app',
+            router,
+            data() {
+                return {
+                    title: 'Movies Application',
+                }
+            },
+            store
+        }) 
+    </script>
+</body>
+
+</html>
