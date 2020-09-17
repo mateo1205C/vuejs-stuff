@@ -1,22 +1,21 @@
 let ImageComp = {
     template: `   
-        <div @click="showModal()" class="img-hover-zoom">     
-            <img class="img-thumbnail img
-            rounded float-left" :id="'img'+(id-1)" :src="src" :alt="'Image ' + id">    
+        <div @click="showModal()" class="img-hover-zoom img-thumbnail">     
+            <img class="rounded float-left" :id="'img'+(id-1)" :src="src" :alt="'Image ' + id">    
         </div>    
     `,
     props: {
         id: {
             type: Number,
             required: true,
-        }, 
+        },
         src: {
             type: String,
             requierd: true
         }
     },
     methods: {
-        showModal () {
+        showModal() {
             let data = {
                 id: this.id,
                 src: this.src,

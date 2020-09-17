@@ -28,14 +28,13 @@ body {
     transition: opacity .3s ease;
 }
 
-.positionContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+img {
+    width: 100%;
 }
 
 .img-hover-zoom {
     overflow: hidden;
+    border-radius: .5rem;
     /* [1.2] Hide the overflowing of child elements */
 }
 
@@ -50,31 +49,26 @@ body {
     transform: scale(1.5);
 }
 
-
-/* 
-.positionContainer{    
+.positionContainer {
     height: 100vh;
     display: flex;
     justify-content: center;
-    align-items: center;     
+    align-items: center;
 }
 
-.mini-container {    
+.mini-container {
     width: 60%;
-    height: 73%;    
+    height: 73%;
     background: rgb(118, 118, 118);
     padding: 2rem 1.5rem;
-    border-radius: 1rem;    
-    box-shadow: 0 0 2rem 0 rgba(0, 0, 0, 1);    
-}
-
-img {
-    width: 100%;    
     border-radius: 1rem;
+    box-shadow: 0 0 2rem 0 rgba(0, 0, 0, 1);
 }
 
-.btn-disabled { 
-    opacity: 0.2; 
+.btn-disabled {
+    opacity: 0.2;
     pointer-events: auto! important;
     cursor: not-allowed! important;
-} */
+}
+
+*/
