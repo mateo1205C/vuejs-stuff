@@ -2,7 +2,7 @@ Vue.component('galery-app', {
     template: `
     <div @keyup.esc="showModal = false" tabindex="0">
         <div class="principalContainer">            
-            <div class="imgDIV d-inline-block col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4" 
+            <div class="imgDIV d-inline-block col-12 col-sm-12 col-md-6 col-lg-6 col-xl-3" 
                v-for="(image, key) in imgArray" :key="key">
                 <ImageComp
                     :id="image.id"
