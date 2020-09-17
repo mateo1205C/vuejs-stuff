@@ -31,7 +31,7 @@ Vue.component('galery-app', {
         ModalComp,
     },
     mounted() {
-        this.start()        
+        this.start()
     },
     methods: {
         start() {
@@ -39,14 +39,14 @@ Vue.component('galery-app', {
             for (let i = 0; i < 10; i++) {
                 data = {
                     id: i,
-                    src: "img/" + (i + 1)+".jpg"
-                }                
+                    src: "img/" + (i + 1) + ".jpg"
+                }
                 this.imgArray.push(data)
             }
         },
-        onShowModal (data) {
+        onShowModal(data) {
             this.showModal = true
-            this.idModal = data.id            
+            this.idModal = data.id
         },
-    },    
+    },
 })

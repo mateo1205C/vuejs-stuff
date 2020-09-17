@@ -1,5 +1,5 @@
 let ModalComp = {
-    template:`        
+    template: `        
             <div class="container">
                 <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
                     <div class="carousel-inner">
@@ -25,7 +25,7 @@ let ModalComp = {
             imgArray: this.imgObject,
             source: this.imgObject[this.index].id,
         }
-    },    
+    },
     props: {
         index: {
             type: Number,
@@ -37,8 +37,8 @@ let ModalComp = {
         }
     },
     methods: {
-        indexSource (value) {
-            if(this.source == value) {
+        indexSource(value) {
+            if (this.source == value) {
                 return true
             }
             return false

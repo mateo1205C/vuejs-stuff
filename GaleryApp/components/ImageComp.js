@@ -1,7 +1,7 @@
 let ImageComp = {
     template: `   
-        <div @click="showModal()">     
-            <img class="img-thumbnail
+        <div @click="showModal()" class="img-hover-zoom">     
+            <img class="img-thumbnail img
             rounded float-left" :id="'img'+(id-1)" :src="src" :alt="'Image ' + id">    
         </div>    
     `,

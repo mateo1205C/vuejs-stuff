@@ -1,7 +1,10 @@
-body {    
-    background: #000000;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #434343, #000000);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #434343, #000000); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+body {
+    background: #000000;
+    /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #434343, #000000);
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #434343, #000000);
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
 .principalContainer {
@@ -10,7 +13,7 @@ body {
 
 .imgDIV {
     margin: 0 !important;
-    padding: 1rem !important; 
+    padding: 1rem !important;
 }
 
 .modalDIV {
@@ -22,14 +25,31 @@ body {
     height: 100%;
     background-color: rgba(0, 0, 0, .9);
     display: table;
-    transition: opacity .3s ease;      
+    transition: opacity .3s ease;
 }
 
-.positionContainer{        
+.positionContainer {
     display: flex;
     justify-content: center;
-    align-items: center;     
+    align-items: center;
 }
+
+.img-hover-zoom {
+    overflow: hidden;
+    /* [1.2] Hide the overflowing of child elements */
+}
+
+.img-hover-zoom img {
+    transition: transform .5s ease;
+}
+
+
+/* [3] Finally, transforming the image when container gets hovered */
+
+.img-hover-zoom:hover img {
+    transform: scale(1.5);
+}
+
 
 /* 
 .positionContainer{    
