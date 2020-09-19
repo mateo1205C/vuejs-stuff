@@ -31,7 +31,7 @@ let SearchComp = {
         }
     },
     methods: {
-        search () {
+        search() {
             let URL = `${BASEURL}/search/movie?api_key=${APIKEY}&language=es-ES&query=${this.query}&page=${this.page}`
             fetch(URL)
                 .then(res => res.json())
@@ -39,11 +39,11 @@ let SearchComp = {
                     this.$emit('input', data)
                 })
         },
-        setPage (page) {
+        setPage(page) {
             this.page = page
             this.search()
         },
-        resetSearch () {
+        resetSearch() {
             this.query = ''
             this.page = 1
             this.$emit('input', {})

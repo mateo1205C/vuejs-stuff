@@ -1,13 +1,15 @@
 const MovieApp = Vue.component('movie-app', {
     template: `
-        <div class="container">
-            <h5>Bienvenido {{ user.name }} {{ user.lastName }}</h5>
-            <SearchComp ref="searchComp" v-model="searchMovies" />
+        <div class="container-fluid">
+            <div class="container">
+                <h5>Bienvenido {{ user.name }} {{ user.lastName }}</h5>
+                <SearchComp ref="searchComp" v-model="searchMovies" />
+            </div>
             <div v-show="! Object.keys(searchMovies).length">
                 <h1>Peliculas App {{ $store.state.count }}</h1>                
                 <!-- <button @click="$store.commit('increment')">+</button> -->
                 <div class="row">
-                    <div class="col-12 col-md-6 col-lg-4 py-3" v-for="(movie, key) in movies" 
+                    <div class="col-12 col-md-6 col-lg-3 py-3" v-for="(movie, key) in movies" 
                     :key="key">
                         <MovieComp
                         :id="movie.id"
@@ -20,33 +22,30 @@ const MovieApp = Vue.component('movie-app', {
                     </div>                
                 </div>
                 
-                <nav aria-label="Page navigation example">
+                <nav aria-label="Page navigation example" class=" d-flex justify-content-center">
                     <ul class="pagination">
-                        <li class="page-item">
-                            <a class="btn d-inline page-link" href="#" aria-label="Previous">
+                        <li class="page-item" :class="{
+                            'disabled': numPagination == 5
+                        }">
+                            <a @click="beforePage()" class="btn d-inline page-link" aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
-                        <li class="page-item">
-                            <a @click="setPage(n)" class="btn d-inline page-link" :class="{
+                        <li class="page-item" v-if="paginationVIF(n)" v-for="(n, index) in numPagination" :key="index">
+                            <a @click="setPage(n)" class="btn d-inline page-link active" :class="{
                                 'btn-light': n != page,
                                 'btn-primary': n == page
-                            }" v-for="(n, index) in numPagination" :key="index">{{ n }}</a>
+                            }">{{ n }}</a>
                         </li>
-                        <li class="page-item">
-                            <a class="btn d-inline page-link" href="#" aria-label="Next">
+                        <li class="page-item" :class="{
+                            'disabled': numPagination == 500                                                
+                        }">
+                            <a @click="prevPage()" class="btn d-inline page-link" aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
                             </a>
                         </li>
                     </ul>
                 </nav>
-
-                <!-- <div class="row">
-                    <a v-if="" @click="setPage(n)" class="btn m-1" :class="{
-                        'btn-light': n != page,
-                        'btn-primary': n == page
-                    }" v-for="(n, index) in numPagination" :key="index">{{ n }}</a>
-                </div> -->
 
             </div>
             <div v-show="Object.keys(searchMovies).length">
@@ -87,7 +86,8 @@ const MovieApp = Vue.component('movie-app', {
             showLike: false,
             page: 1,
             total_pages: null,
-            numPagination: 6,
+            numPagination: null,
+
             searchMovies: {},
         }
     },
@@ -99,9 +99,26 @@ const MovieApp = Vue.component('movie-app', {
     computed: {
         ...Vuex.mapState({ //Esto sirve para usar solo la variable favMovies directamente en ves de estar llamandolo con $store.state, El STATE tiene que ir en computed
             favoritas: 'favMovies' //favoritas es el renombre de la data
-        })
+        }),
     },
     methods: {
+
+        beforePage() {
+            this.numPagination--
+                this.page = this.page - 1
+            this.getPopularMovies()
+        },
+        prevPage() {
+            this.numPagination++
+                this.page = this.page + 1
+            this.getPopularMovies()
+        },
+        paginationVIF(value) {
+            if ((value + 5) >= this.numPagination) {
+                return true
+            }
+            return false
+        },
         onToggleLike(data) {
             let movieLike = this.movies.find(movie => movie.id == data.id)
             movieLike.like = data.like
@@ -124,9 +141,8 @@ const MovieApp = Vue.component('movie-app', {
         },
         setPage(page) {
             this.page = page
-            this.getPopularMovies()
-            this.numPagination = (page + 5)
             console.log(this.numPagination)
+            this.getPopularMovies()
         },
         ...Vuex.mapMutations({ //Esto sirve para usar solo la variable favMovies directamente en ves de estar llamandolo con $store.state, El MUTATIONS tiene que ir en los metodos
             storeFavoritas: 'toggleFavMovie'
@@ -134,7 +150,8 @@ const MovieApp = Vue.component('movie-app', {
     },
     mounted() {
         let locationURL = new URL(window.location.href)
-        this.page = locationURL.searchParams.get('page') || 1
+        this.page = locationURL.searchParams.get('page') || this.page
         this.getPopularMovies()
+        this.numPagination = this.page + 5
     },
 })

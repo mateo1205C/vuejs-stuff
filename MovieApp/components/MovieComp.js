@@ -1,6 +1,6 @@
 let MovieComp = {
     template: `
-        <div :id="id | formatId" class="card">
+        <div :id="id | formatId" class="card sizeBOX">
             <img :src="cover | coverURL" class="card-img-top">
             <div class="card-body">                
                 <h2 class="card-title">{{ title | uppercase }}</h2>            
@@ -36,27 +36,27 @@ let MovieComp = {
         like: {
             type: Boolean,
             required: true,
-            default() {
+            default () {
                 return false
             }
         }
     },
     filters: {
-        formatId (value) {
+        formatId(value) {
             return `movieCard-${value}`
         },
-        uppercase (value) { //Metodo para poner en mayusculas
+        uppercase(value) { //Metodo para poner en mayusculas
             return value.toUpperCase()
         },
-        forthyLetters (value) { //Metodo para solo mostrar 40 caracteres
-            return value.substring(0,100) + '...'
+        forthyLetters(value) { //Metodo para solo mostrar 40 caracteres
+            return value.substring(0, 100) + '...'
         }
     },
     computed: {
-        btnStatus () {
+        btnStatus() {
             return this.isFav ? 'btn-like' : 'btn-light'
         },
-        isFav () {
+        isFav() {
             let favMovies = this.$store.state.favMovies
             let index = favMovies.findIndex(movie => movie.id == this.id)
             return index >= 0
@@ -65,13 +65,13 @@ let MovieComp = {
     methods: {
         toggleLike() {
             let data = {
-                id: this.id,
-                like: !this.like
-            }
-            // Obtener data de hijos directamente desde el padre
-            /* let movie = this.$parent.movies.find(m => m.id == this.id)
-            movie.like = !this.like
-            this.$parent.showLike = !this.like */
+                    id: this.id,
+                    like: !this.like
+                }
+                // Obtener data de hijos directamente desde el padre
+                /* let movie = this.$parent.movies.find(m => m.id == this.id)
+                movie.like = !this.like
+                this.$parent.showLike = !this.like */
 
             this.$emit('toggleLike', data)
         },
