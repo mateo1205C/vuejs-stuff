@@ -18,24 +18,37 @@ let MovieDetails = {
                     </div>
                 </div>
             </div>
+            <div class="container">
+                <iframe class="videoMovie" :src="'https://www.youtube.com/embed/'+videoMovie"></iframe>             
+            </div>
         </div>
     `,
     data() {
         return {
-            movie: {}
+            movie: {},
+            videoMovie: {}
         }
     },
     methods: {
-        getMovie () {
+        getMovie() {
             fetch(`${this.apiBaseURL}/movie/${this.$route.params.id}${this.apiConfig}`)
                 .then(res => res.json())
                 .then(data => {
                     //debugger
                     this.movie = data
                 })
+        },
+        getVideoMovie() {
+            const URL = `${this.apiBaseURL}/movie/${this.$route.params.id}/videos${this.apiConfig}`
+            fetch(URL)
+                .then(res => res.json())
+                .then(data => {
+                    this.videoMovie = data.results[0].key
+                })
         }
     },
     mounted() {
         this.getMovie()
+        this.getVideoMovie()
     },
 }

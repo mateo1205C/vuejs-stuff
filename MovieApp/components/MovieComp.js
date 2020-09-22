@@ -22,11 +22,11 @@ let MovieComp = {
             </div>
         </div>
         -->
-        <div class="col-12 col-sm-12 col-md-4 col-lg-3 col-xl-2 my-3">                
+        <div class="col-12 col-sm-12 col-md-4 col-lg-3 col-xl-2 m-3">                
             <div class="position-relative">
-                <router-link :to="{name: 'pelicula', params: {id}}" class="text-decoration-none text-dark">
+                <router-link :to="{name: 'movie', params: {id}}" class="text-decoration-none text-dark">
                     <div class="img-hover-zoom">                        
-                        <img :src="cover | coverURL" class="rounded-lg img-fluid">                                                                                        
+                        <img :src="cover | coverURL" class="rounded-lg img-fluid">
                     </div>
                     <h5 class="text-center py-2 px-3 m-0">{{ title }}</h5>
                 </router-link> 
