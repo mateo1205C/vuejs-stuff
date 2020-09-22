@@ -1,20 +1,35 @@
 let MovieComp = {
-    template: `
-        <div :id="id | formatId" class="card sizeBOX">
-            <img :src="cover | coverURL" class="card-img-top">
-            <div class="card-body">                
-                <h2 class="card-title">{{ title | uppercase }}</h2>            
-                <p class="card-text">{{ synopsis | forthyLetters}}</p>
-                <button class="btn" :class="btnStatus" @click="toggleLike">
-                    <span v-text="isFav ? 'Favorita' : 'Agregar a Favoritos'"></span>
-                    <i class="fa-heart" :class="{
-                        'far': !isFav,
-                        'fas': isFav
-                    }"></i>                    
-                </button>
-                <router-link :to="{name: 'pelicula', params: {id}}" class="btn btn-primary">Detalle</router-link>
+    template: `            
+        <!--
+        <div class="card-deck mb-5">
+            <div :id="id | formatId" class="card">
+                <img :src="cover | coverURL" class="card-img-top rounded-lg">
+                
+                <div class="card-body">                            
+                    <h5 class="card-title text-left">{{ title }}</h5>
+                    <p class="card-text">{{ synopsis | forthyLetters}}</p>
+                    <div class="d-flex justify-content-between">
+                        <router-link :to="{name: 'pelicula', params: {id}}" class="btn btn-primary">Detalle</router-link>
+                        <button class="btn" :class="btnStatus" @click="toggleLike">
+                            <span v-text="isFav ? 'Favorita' : 'Favoritos'"></span>
+                            <i class="fa-heart" :class="{
+                                'far': !isFav,
+                                'fas': isFav
+                            }"></i>                    
+                        </button>             
+                    </div>   
+                </div>
             </div>
         </div>
+        -->
+            <div class="col-12 col-sm-12 col-md-4 col-lg-3 col-xl-2 p-2">
+                <div class="text-center">            
+                    <img :src="cover | coverURL" class="rounded-lg img-fluid">                
+                </div>
+                <h5 class="text-center py-2 px-3">{{ title }}</h5>            
+            </div>
+
+
     `,
     props: {
         id: {
@@ -49,7 +64,10 @@ let MovieComp = {
             return value.toUpperCase()
         },
         forthyLetters(value) { //Metodo para solo mostrar 40 caracteres
-            return value.substring(0, 100) + '...'
+            if (value.length > 18) {
+                return value.substring(0, 18) + '...'
+            }
+            return value
         }
     },
     computed: {

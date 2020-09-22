@@ -1,77 +1,82 @@
 const MovieApp = Vue.component('movie-app', {
     template: `
-        <div class="container-fluid">
+        <div class="container-fluid">            
             <div class="container">
                 <h5>Bienvenido {{ user.name }} {{ user.lastName }}</h5>
                 <SearchComp ref="searchComp" v-model="searchMovies" />
-            </div>
-            <div v-show="! Object.keys(searchMovies).length">
-                <h1>Peliculas App {{ $store.state.count }}</h1>                
-                <!-- <button @click="$store.commit('increment')">+</button> -->
-                <div class="row">
-                    <div class="col-12 col-md-6 col-lg-3 py-3" v-for="(movie, key) in movies" 
-                    :key="key">
-                        <MovieComp
-                        :id="movie.id"
-                        :title="movie.title"
-                        :synopsis="movie.overview"
-                        :cover="movie.poster_path"
-                        :like="movie.like"
-                        @toggleLike="onToggleLike"
-                        />
-                    </div>                
+            </div>            
+            <div v-if="! Object.keys(searchMovies).length">
+                <h1 class="text-center">Peliculas App</h1>
+                <div class="container">                                
+                    <div class="row d-flex align-content-start flex-wrap">
+                        <MovieComp v-for="(movie, key) in movies" 
+                            :key="key"
+                            :id="movie.id"
+                            :title="movie.title"
+                            :synopsis="movie.overview"
+                            :cover="movie.poster_path"
+                            :like="movie.like"
+                            @toggleLike="onToggleLike"
+                        />              
+                    </div>
+                </div>            
+            </div>            
+            <div v-if="Object.keys(searchMovies).length">
+                <h1 class="text-center">Resultados de Busqueda</h1>
+                <div class="container">                                
+                    <div class="row d-flex align-content-start flex-wrap">
+                            <MovieComp v-if="movie.poster_path" v-for="(movie, key) in searchMovies.results" 
+                            :key="key"                            
+                            :id="movie.id"
+                            :title="movie.title"
+                            :synopsis="movie.overview"
+                            :cover="movie.poster_path"
+                            :like="movie.like"
+                            @toggleLike="onToggleLike"
+                            />              
+                    </div>
                 </div>
-                
-                <nav aria-label="Page navigation example" class=" d-flex justify-content-center">
+            </div>
+            
+            <div>                
+                <nav aria-label="Page navigation example" class="d-flex justify-content-center">
                     <ul class="pagination">
-                        <li class="page-item" :class="{
-                            'disabled': numPagination == 5
-                        }">
+                        <li v-if="! Object.keys(searchMovies).length" class="page-item" :class="{'disabled': page == 1}">
                             <a @click="beforePage()" class="btn d-inline page-link" aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
-                        <li class="page-item" v-if="paginationVIF(n)" v-for="(n, index) in numPagination" :key="index">
+                        <li v-if="! Object.keys(searchMovies).length" class="page-item" v-show="paginationVIF(n)" v-for="(n, index) in numPagination" :key="index">
                             <a @click="setPage(n)" class="btn d-inline page-link active" :class="{
                                 'btn-light': n != page,
                                 'btn-primary': n == page
                             }">{{ n }}</a>
                         </li>
-                        <li class="page-item" :class="{
-                            'disabled': numPagination == 500                                                
-                        }">
+                        <li v-if="! Object.keys(searchMovies).length" class="page-item" :class="{'disabled': page == total_pages}">
+                            <a @click="prevPage()" class="btn d-inline page-link" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                            
+                        <li v-if="Object.keys(searchMovies).length" class="page-item" :class="{'disabled': searchMovies.page == 1}">
+                            <a @click="beforePage()" class="btn d-inline page-link" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <li v-if="Object.keys(searchMovies).length" v-show="paginationVIF(n)" class="page-item" v-for="(n, index) in numPagination" :key="index">
+                            <a @click="$refs.searchComp.setPage(n)" class="btn d-inline page-link active" :class="{
+                                'btn-light': n != searchMovies.page,
+                                'btn-primary': n == searchMovies.page
+                            }">{{ n }}</a>
+                        </li>
+                        <li v-if="Object.keys(searchMovies).length" class="page-item" :class="{'disabled': searchMovies.page == searchMovies.total_pages}">
                             <a @click="prevPage()" class="btn d-inline page-link" aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
                             </a>
                         </li>
                     </ul>
                 </nav>
-
             </div>
-            <div v-show="Object.keys(searchMovies).length">
-                <h1>Resultados de Busqueda</h1>
-                <div class="row">
-                    <div class="col-12 col-md-6 col-lg-4 py-3" v-for="(movie, key) in searchMovies.results" 
-                    :key="key"
-                    v-if="movie.poster_path">
-                        <MovieComp
-                        :id="movie.id"
-                        :title="movie.title"
-                        :synopsis="movie.overview"
-                        :cover="movie.poster_path"
-                        :like="movie.like"
-                        @toggleLike="onToggleLike"
-                        />
-                    </div>                
-                </div>
-                <div class="row">
-                    <button @click="$refs.searchComp.setPage(n)" class="btn m-1" :class="{
-                        'btn-light': n != searchMovies.page,
-                        'btn-primary': n == searchMovies.page
-                    }" v-for="(n, index) in searchMovies.numPagination" :key="index">{{ n }}</button>
-                </div>
-            </div>
-            
             <MovieFav ref="movieFav" :show.sync="showLike" />
         </div>
     `,
@@ -87,7 +92,6 @@ const MovieApp = Vue.component('movie-app', {
             page: 1,
             total_pages: null,
             numPagination: null,
-
             searchMovies: {},
         }
     },
@@ -102,19 +106,34 @@ const MovieApp = Vue.component('movie-app', {
         }),
     },
     methods: {
-
-        beforePage() {
-            this.numPagination--
-                this.page = this.page - 1
+        start() {
+            let locationURL = new URL(window.location.href)
+            this.page = locationURL.searchParams.get('page') || this.page
             this.getPopularMovies()
+            this.numPagination = this.page + 4
+        },
+        beforePage() {
+            if ((this.page || this.searchMovies.page) == (this.numPagination - 4)) { this.numPagination -= 5 }
+            if (Object.keys(this.searchMovies).length == 0) {
+                this.page = this.page - 1
+                this.getPopularMovies()
+            } else {
+                let searchPage = this.searchMovies.page
+                this.$refs.searchComp.setPage(searchPage - 1)
+            }
         },
         prevPage() {
-            this.numPagination++
+            if ((this.page || this.searchMovies.page) == this.numPagination) { this.numPagination += 5 }
+            if (Object.keys(this.searchMovies).length == 0) {
                 this.page = this.page + 1
-            this.getPopularMovies()
+                this.getPopularMovies()
+            } else {
+                let searchPage = this.searchMovies.page
+                this.$refs.searchComp.setPage(searchPage + 1)
+            }
         },
         paginationVIF(value) {
-            if ((value + 5) >= this.numPagination) {
+            if ((value + 4) >= this.numPagination) {
                 return true
             }
             return false
@@ -131,7 +150,7 @@ const MovieApp = Vue.component('movie-app', {
             fetch(URL)
                 .then(response => response.json())
                 .then(({ results, page, total_pages }) => {
-                    console.log(page, total_pages)
+                    this.page = page
                     this.total_pages = total_pages
                     this.movies = results.map(m => {
                         m.like = false
@@ -141,7 +160,6 @@ const MovieApp = Vue.component('movie-app', {
         },
         setPage(page) {
             this.page = page
-            console.log(this.numPagination)
             this.getPopularMovies()
         },
         ...Vuex.mapMutations({ //Esto sirve para usar solo la variable favMovies directamente en ves de estar llamandolo con $store.state, El MUTATIONS tiene que ir en los metodos
@@ -149,9 +167,6 @@ const MovieApp = Vue.component('movie-app', {
         })
     },
     mounted() {
-        let locationURL = new URL(window.location.href)
-        this.page = locationURL.searchParams.get('page') || this.page
-        this.getPopularMovies()
-        this.numPagination = this.page + 5
+        this.start()
     },
 })
