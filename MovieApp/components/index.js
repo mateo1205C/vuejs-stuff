@@ -1,14 +1,17 @@
 const MovieApp = Vue.component('movie-app', {
     template: `
-        <div class="container-fluid">            
-            <div class="container">
+        <div class="container-fluid">          
+            <MovieFav ref="movieFav" :show.sync="showLike" />  
+            <div class="container text-center">
                 <h5>Bienvenido {{ user.name }} {{ user.lastName }}</h5>
-                <SearchComp ref="searchComp" v-model="searchMovies" />
+                <SearchComp ref="searchComp" v-model="searchMovies" 
+                    @input="onInput"
+                />
             </div>            
             <div v-if="! Object.keys(searchMovies).length">
                 <h1 class="text-center">Peliculas App</h1>
                 <div class="container">                                
-                    <div class="row d-flex align-content-start flex-wrap">
+                    <div class="row">
                         <MovieComp v-for="(movie, key) in movies" 
                             :key="key"
                             :id="movie.id"
@@ -24,8 +27,8 @@ const MovieApp = Vue.component('movie-app', {
             <div v-if="Object.keys(searchMovies).length">
                 <h1 class="text-center">Resultados de Busqueda</h1>
                 <div class="container">                                
-                    <div class="row d-flex align-content-start flex-wrap">
-                            <MovieComp v-if="movie.poster_path" v-for="(movie, key) in searchMovies.results" 
+                    <div class="row">
+                        <MovieComp v-if="movie.poster_path" v-for="(movie, key) in searchMovies.results" 
                             :key="key"                            
                             :id="movie.id"
                             :title="movie.title"
@@ -33,7 +36,7 @@ const MovieApp = Vue.component('movie-app', {
                             :cover="movie.poster_path"
                             :like="movie.like"
                             @toggleLike="onToggleLike"
-                            />              
+                        />              
                     </div>
                 </div>
             </div>
@@ -46,7 +49,7 @@ const MovieApp = Vue.component('movie-app', {
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
-                        <li v-if="! Object.keys(searchMovies).length" class="page-item" v-show="paginationVIF(n)" v-for="(n, index) in numPagination" :key="index">
+                        <li v-if="! Object.keys(searchMovies).length" class="page-item" v-show="paginationVIF(n)" v-for="(n, index) in total_pages" :key="index">
                             <a @click="setPage(n)" class="btn d-inline page-link active" :class="{
                                 'btn-light': n != page,
                                 'btn-primary': n == page
@@ -63,7 +66,7 @@ const MovieApp = Vue.component('movie-app', {
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
-                        <li v-if="Object.keys(searchMovies).length" v-show="paginationVIF(n)" class="page-item" v-for="(n, index) in numPagination" :key="index">
+                        <li v-if="Object.keys(searchMovies).length" v-show="paginationVIF(n)" class="page-item" v-for="(n, index) in searchMovies.total_pages" :key="index">
                             <a @click="$refs.searchComp.setPage(n)" class="btn d-inline page-link active" :class="{
                                 'btn-light': n != searchMovies.page,
                                 'btn-primary': n == searchMovies.page
@@ -76,8 +79,7 @@ const MovieApp = Vue.component('movie-app', {
                         </li>
                     </ul>
                 </nav>
-            </div>
-            <MovieFav ref="movieFav" :show.sync="showLike" />
+            </div>            
         </div>
     `,
     data() {
@@ -92,6 +94,8 @@ const MovieApp = Vue.component('movie-app', {
             page: 1,
             total_pages: null,
             numPagination: null,
+            paginationMovies: 5,
+            paginationSearchMovies: 5,
             searchMovies: {},
         }
     },
@@ -113,27 +117,41 @@ const MovieApp = Vue.component('movie-app', {
             this.numPagination = this.page + 4
         },
         beforePage() {
-            if ((this.page || this.searchMovies.page) == (this.numPagination - 4)) { this.numPagination -= 5 }
             if (Object.keys(this.searchMovies).length == 0) {
+                if (this.page == (this.numPagination - 4)) {
+                    this.numPagination -= 5
+                    this.paginationMovies = this.numPagination
+                }
                 this.page = this.page - 1
                 this.getPopularMovies()
             } else {
+                if (this.searchMovies.page == (this.numPagination - 4)) {
+                    this.numPagination -= 5
+                    this.paginationSearchMovies = this.numPagination
+                }
                 let searchPage = this.searchMovies.page
                 this.$refs.searchComp.setPage(searchPage - 1)
             }
         },
         prevPage() {
-            if ((this.page || this.searchMovies.page) == this.numPagination) { this.numPagination += 5 }
             if (Object.keys(this.searchMovies).length == 0) {
+                if (this.page == this.numPagination) {
+                    this.numPagination += 5
+                    this.paginationMovies = this.numPagination
+                }
                 this.page = this.page + 1
                 this.getPopularMovies()
             } else {
+                if (this.searchMovies.page == this.numPagination) {
+                    this.numPagination += 5
+                    this.paginationSearchMovies = this.numPagination
+                }
                 let searchPage = this.searchMovies.page
                 this.$refs.searchComp.setPage(searchPage + 1)
             }
         },
         paginationVIF(value) {
-            if ((value + 4) >= this.numPagination) {
+            if ((value <= this.numPagination) && (value + 4) >= this.numPagination) {
                 return true
             }
             return false
@@ -157,6 +175,15 @@ const MovieApp = Vue.component('movie-app', {
                         return m
                     })
                 })
+        },
+        onInput() {
+            if (Object.keys(this.searchMovies).length == 0) {
+                this.numPagination = this.paginationMovies
+                this.paginationSearchMovies = 5
+            } else {
+                this.numPagination = this.paginationSearchMovies
+            }
+
         },
         setPage(page) {
             this.page = page

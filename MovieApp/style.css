@@ -2,6 +2,43 @@ body {
     background-color: #EDF1F5;
 }
 
+img {
+    width: 100%;
+}
+
+.img-hover-zoom {
+    overflow: hidden;
+    border-radius: .5rem;
+    /* [1.2] Hide the overflowing of child elements */
+}
+
+.img-hover-zoom img {
+    transition: transform .5s ease;
+}
+
+
+/* [3] Finally, transforming the image when container gets hovered */
+
+.img-hover-zoom:hover img {
+    transform: scale(1.2);
+}
+
+.divBTNLIKE {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 5px;
+}
+
+.coverIMAGE {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.btnLIKE {
+    padding: 0 5px;
+}
+
 .input-group.md-form.form-sm.form-2 input.green-border {
     border: 1px solid #3BA877;
 }
@@ -15,13 +52,14 @@ body {
 .btn-like {
     border-color: #ef5777;
     color: #ef5777;
+    background-color: black;
 }
 
 .movie-like {
     box-shadow: 0 0 0 4px #ef5777;
 }
 
-.movieFav-wrapper {
+.movieFbav-wrapper {
     background: #fff;
     position: fixed;
     display: flex;
@@ -38,7 +76,7 @@ body {
     width: 100px;
     height: 90px;
     animation: heartbeat 2s forwards;
-    margin: 0 auto
+    margin: 0 auto;
 }
 
 .movieFav:before,
