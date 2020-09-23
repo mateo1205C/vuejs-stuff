@@ -19,7 +19,9 @@ let MovieDetails = {
                 </div>
             </div>
             <div class="container">
-                <iframe class="videoMovie" :src="'https://www.youtube.com/embed/'+videoMovie"></iframe>             
+                <div class="my-2 mx-5">
+                    <iframe class="videoMovie " :src="'https://www.youtube.com/embed/'+videoMovie"></iframe>             
+                </div>
             </div>
         </div>
     `,
@@ -35,6 +37,7 @@ let MovieDetails = {
                 .then(res => res.json())
                 .then(data => {
                     //debugger
+                    console.log(data.genres[0].name)
                     this.movie = data
                 })
         },

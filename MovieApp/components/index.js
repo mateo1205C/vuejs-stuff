@@ -1,15 +1,11 @@
 const MovieApp = Vue.component('movie-app', {
     template: `
-        <div class="container-fluid">          
-            <MovieFav ref="movieFav" :show.sync="showLike" />  
-            <div class="container text-center">
-                <h5>Bienvenido {{ user.name }} {{ user.lastName }}</h5>
-                <SearchComp ref="searchComp" v-model="searchMovies" 
-                    @input="onInput"
-                />
-            </div>            
-            <div v-if="! Object.keys(searchMovies).length">
-                <h1 class="text-center">Peliculas App</h1>
+        <div>
+            <MovieFav ref="movieFav" :show.sync="showLike" /> 
+            <SearchComp ref="searchComp" v-model="searchMovies" 
+                @input="onInput"
+            />                                  
+            <div v-if="! Object.keys(searchMovies).length">                
                 <div class="container">                                
                     <div class="row">
                         <MovieComp v-for="(movie, key) in movies" 
@@ -114,6 +110,7 @@ const MovieApp = Vue.component('movie-app', {
             let locationURL = new URL(window.location.href)
             this.page = locationURL.searchParams.get('page') || this.page
             this.getPopularMovies()
+            this.getLatestMovies()
             this.numPagination = this.page + 4
         },
         beforePage() {
@@ -124,6 +121,7 @@ const MovieApp = Vue.component('movie-app', {
                 }
                 this.page = this.page - 1
                 this.getPopularMovies()
+                    //this.getLatestMovies()
             } else {
                 if (this.searchMovies.page == (this.numPagination - 4)) {
                     this.numPagination -= 5
@@ -141,6 +139,7 @@ const MovieApp = Vue.component('movie-app', {
                 }
                 this.page = this.page + 1
                 this.getPopularMovies()
+                    //this.getLatestMovies()
             } else {
                 if (this.searchMovies.page == this.numPagination) {
                     this.numPagination += 5
@@ -164,7 +163,9 @@ const MovieApp = Vue.component('movie-app', {
             this.showLike = data.like
         },
         getPopularMovies() {
-            const URL = `${BASEURL}/discover/movie?sort_by=popularity.desc&api_key=${APIKEY}&page=${this.page}`
+            //https://api.themoviedb.org/3/movie/popular?api_key=<<api_key>>&language=en-US&page=1
+            const URL = `${BASEURL}/movie/popular?api_key=${APIKEY}&page=${this.page}`
+                //const URL = `${BASEURL}/discover/movie?sort_by=popularity.desc&api_key=${APIKEY}&page=${this.page}`
             fetch(URL)
                 .then(response => response.json())
                 .then(({ results, page, total_pages }) => {
@@ -174,6 +175,21 @@ const MovieApp = Vue.component('movie-app', {
                         m.like = false
                         return m
                     })
+                })
+        },
+        getLatestMovies() {
+            //https://api.themoviedb.org/3/movie/latest?api_key=<<api_key>>&language=en-US
+            const URL = `${this.apiBaseURL}/genre/movie/list${this.apiConfig}`
+            fetch(URL)
+                .then(response => response.json())
+                .then( /* ({ results, page, total_pages }) */ data => {
+                    console.log(data)
+                        /* this.page = page
+                        this.total_pages = total_pages
+                        this.movies = results.map(m => {
+                            m.like = false
+                            return m
+                        }) */
                 })
         },
         onInput() {
@@ -188,6 +204,7 @@ const MovieApp = Vue.component('movie-app', {
         setPage(page) {
             this.page = page
             this.getPopularMovies()
+                //this.getLatestMovies()
         },
         ...Vuex.mapMutations({ //Esto sirve para usar solo la variable favMovies directamente en ves de estar llamandolo con $store.state, El MUTATIONS tiene que ir en los metodos
             storeFavoritas: 'toggleFavMovie'
