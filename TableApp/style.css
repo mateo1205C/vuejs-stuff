@@ -1,0 +1,29 @@
+html,
+body {
+    margin: 0;
+}
+
+body {
+    /* BACKGROUND */
+    background: #333333;
+    /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #dd1818, #333333);
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #dd1818, #333333);
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.positionContainer {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mini-container {
+    width: 50%;
+    max-height: 573px;
+    background: #fff;
+    padding: 1rem 1.5rem 0rem 1.5rem;
+    box-shadow: 0 0 1.5rem 0 rgba(0, 0, 0, 0.8);
+}
