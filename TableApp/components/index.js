@@ -23,14 +23,6 @@ Vue.component('table-app', {
                         </table>
                     </div>  
                 </div>                        
-                <div class=" m-5">
-                    <select v-model="numberRows" @change="page = 1">                
-                        <option :value="10">10/rows</option>
-                        <option :value="20">20/rows</option>
-                        <option :value="50">50/rows</option>
-                        <option :value="100">100/rows</option>
-                    </select> 
-                </div>
                 <div>                            
                     <nav aria-label="Page navigation example" class="d-flex justify-content-center">
                         <ul class="pagination">
@@ -52,6 +44,14 @@ Vue.component('table-app', {
                             </li>                        
                         </ul>
                     </nav>
+                </div>
+                <div class="mt-1">
+                    <select v-model="numberRows" @change="page = 1">                
+                        <option :value="10">10/rows</option>
+                        <option :value="20">20/rows</option>
+                        <option :value="50">50/rows</option>
+                        <option :value="100">100/rows</option>
+                    </select> 
                 </div>
             </div>            
         </div>
