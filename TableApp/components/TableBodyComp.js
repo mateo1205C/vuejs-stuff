@@ -1,7 +1,7 @@
 let TableBodyComp = {
     template: `
         <tr>
-            <th scope="row"><input type="checkbox"/></th>
+            <th scope="row"><input type="checkbox" :checked="checkState"></th>
             <td v-text="numberID"></td>
             <td v-text="numberID + 'First'"></td>
             <td v-text="numberID + 'Last'"></td>
@@ -11,6 +11,10 @@ let TableBodyComp = {
     props: {
         numberID: {
             type: Number,
+            required: true,
+        },
+        checkState: {
+            type: Boolean,
             required: true,
         }
     }

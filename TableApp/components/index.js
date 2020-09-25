@@ -7,7 +7,7 @@ Vue.component('table-app', {
                         <table class="table">
                             <thead class="thead-dark">
                             <tr>
-                                <th scope="col"><input type="checkbox"/></th>
+                                <th scope="col"><input type="checkbox" v-model="checkState"></th>
                                 <th scope="col">Index</th>
                                 <th scope="col">First</th>
                                 <th scope="col">Last</th>
@@ -18,6 +18,7 @@ Vue.component('table-app', {
                                 <TableBodyComp v-if="PaginationVIF(number)" v-for="(number, key) in 200" 
                                     :key="key"                            
                                     :numberID="number"
+                                    :checkState="checkState"
                                 />
                             </tbody>
                         </table>
@@ -64,6 +65,7 @@ Vue.component('table-app', {
             numberRows: 10,
             page: 1,
             pagination: 20,
+            checkState: false,
         }
     },
     methods: {
