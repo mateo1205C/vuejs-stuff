@@ -57,7 +57,7 @@ let SearchComp = {
         }
     },
     methods: {
-        scrollDirection() {
+        scrollDirection: function() {
             var lastScrollTop = 0;
             $(window).scroll(function(event) {
                 var st = $(this).scrollTop();
@@ -87,9 +87,12 @@ let SearchComp = {
             this.query = ''
             this.page = 1
             this.$emit('input', {})
-        }
+        },
     },
-    mounted() {
-        this.scrollDirection()
+    created() {
+        window.addEventListener('scroll', this.scrollDirection());
+    },
+    destroyed() {
+        window.removeEventListener('scroll', this.scrollDirection());
     },
 }
